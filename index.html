@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>LightWebUi</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="app" class="app">
+    
+    <aside id="sidebar" class="sidebar-rail">
+      <div class="rail-top">
+        <div class="app-logo"><i data-lucide="sparkles"></i></div>
+        <button id="newChatBtn" class="rail-btn" title="New Chat">
+          <i data-lucide="plus-circle"></i>
+        </button>
+        <button id="historyBtn" class="rail-btn" title="History">
+          <i data-lucide="message-square"></i>
+        </button>
+      </div>
+
+      <div class="rail-bottom">
+        <button id="settingsBtn" class="rail-btn" title="Settings">
+          <i data-lucide="settings-2"></i>
+        </button>
+      </div>
+    </aside>
+
+    <div id="historyDrawer" class="history-drawer">
+      <div class="drawer-header">Chats</div>
+      <div id="chatsList" class="chats-list"></div>
+    </div>
+
+    <main class="main">
+      
+      <header class="top-bar">
+        <div id="currentTitle" class="header-title">New Chat</div>
+        <div id="hwPill" class="hw-pill">
+          <div id="cpuVal">CPU <span>0%</span></div>
+          <div id="ramVal">RAM <span>0%</span></div>
+          <div id="tmpVal">TEMP<span>0°C</span></div>
+        </div>
+      </header>
+
+      <div id="conversation" class="conversation"></div>
+
+      <div id="welcomeScreen" class="welcome-screen">
+        <div class="welcome-header">
+          <div class="brand-icon"><i data-lucide="cpu"></i></div>
+          <h1>Your Personal LLM</h1>
+          <p>Trained LLM that caters to your personal needs</p>
+        </div>
+        
+        <div class="suggestion-grid">
+          <button class="card" onclick="setInput('Write a Python script that scrapes data from...')">
+            <div class="card-icon"><i data-lucide="code-2"></i></div>
+            <div class="card-text">Create a Python script<br><span>to scrape data</span></div>
+          </button>
+          
+          <button class="card" onclick="setInput('Generate an image prompt for a cyberpunk city...')">
+            <div class="card-icon"><i data-lucide="image"></i></div>
+            <div class="card-text">Create an image prompt<br><span>for a cyberpunk city</span></div>
+          </button>
+          
+          <button class="card" onclick="setInput('Write an article about the future of AI...')">
+            <div class="card-icon"><i data-lucide="pen-tool"></i></div>
+            <div class="card-text">Write an article<br><span>about the future of AI</span></div>
+          </button>
+          
+          <button class="card" onclick="setInput('Analyze my sales data and calculate CAC...')">
+            <div class="card-icon"><i data-lucide="bar-chart-2"></i></div>
+            <div class="card-text">Analyze data<br><span>and tell me my CAC</span></div>
+          </button>
+        </div>
+      </div>
+
+      <div class="input-wrapper">
+        <div class="input-container">
+          <button id="micBtn" class="input-icon-btn"><i data-lucide="mic"></i></button>
+          <textarea id="input" placeholder="Ask your personal LLM..." rows="1"></textarea>
+          <div class="right-actions">
+            <button id="stopBtn" class="input-icon-btn danger hidden"><i data-lucide="square"></i></button>
+            <button id="sendBtn" class="send-btn"><i data-lucide="arrow-up"></i></button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <div id="settingsDrawer" class="settings-drawer hidden">
+      <div class="settings-overlay" id="settingsOverlay"></div>
+      <div class="settings-panel">
+        <div class="settings-header">
+          <h2>Settings</h2>
+          <button id="closeSettingsDrawer" class="close-btn"><i data-lucide="x"></i></button>
+        </div>
+        <div class="settings-body">
+           <div class="input-group">
+             <label>Themes</label>
+             <select id="themeSelect">
+               <optgroup label="Dark Themes">
+                 <option value="dark">Dark Charcoal</option>
+                 <option value="oled">OLED Black</option>
+                 <option value="midnight">Midnight Blue</option>
+                 <option value="terminal">Matrix Terminal</option>
+               </optgroup>
+               <optgroup label="Light Themes">
+                 <option value="playground">Playground</option>
+                 <option value="blossom">Blossom</option>
+                 <option value="cotton-candy">Cotton Candy</option>
+               </optgroup>
+             </select>
+           </div>
+           <div class="input-group">
+             <label>System Instructions</label>
+             <textarea id="systemInputSettings" rows="4"></textarea>
+           </div>
+           <div class="input-group">
+             <label>Model</label>
+             <select id="modelSelect"></select>
+           </div>
+           <div class="toggle-row">
+             <label>Enter to Send</label>
+             <input type="checkbox" id="enterToSendToggle">
+           </div>
+           <div class="toggle-row">
+             <label>Read Replies Aloud</label>
+             <input type="checkbox" id="readAloudToggle">
+           </div>
+           <div class="actions-row">
+              <button id="exportDataBtn" class="secondary-btn">Export</button>
+              <button id="clearDataBtn" class="secondary-btn">Reset</button>
+           </div>
+           <div id="settingsSectionTitle" style="display:none"></div>
+           <button id="voiceToggle" style="display:none"></button>
+           <button id="renameBtn" style="display:none"></button>
+           <div id="menuBtn" style="display:none"></div> </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+  </div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

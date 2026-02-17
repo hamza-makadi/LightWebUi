@@ -1,0 +1,11 @@
+services:
+  lightwebui:
+    build: .
+    container_name: lightwebui
+    ports:
+      - "8080:80"
+    volumes:
+      - ./stats.json:/usr/share/nginx/html/stats.json
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
