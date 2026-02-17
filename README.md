@@ -87,7 +87,7 @@ docker run -d -p 8080:80 --add-host=host.docker.internal:host-gateway lightwebui
 ### Method C --- Static (No Docker)
 
 ``` bash
-git clone https://github.com/hamza-makadi/LightWebUI.git
+git clone https://github.com/hamza-makadi/LightWebUi.git
 cd LightWebUI
 python3 -m http.server 8080
 ```
